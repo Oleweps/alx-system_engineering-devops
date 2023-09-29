@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+# Write Bash (init) script 101-manage_my_process that manages manage_my_process. (both files need to be pushed to git)
+# Requirements:
+# When passing the argument start:
+#    Starts manage_my_process
+#    Creates a file containing its PID in /var/run/my_process.pid
+#    Displays manage_my_process started
+#    When passing the argument stop:
+#    Stops manage_my_process
+#    Deletes the file /var/run/my_process.pid
+#    Displays manage_my_process stopped
+#    When passing the argument restart
+#    Stops manage_my_process
+#    Deletes the file /var/run/my_process.pid
+#    Starts manage_my_process
+#    Creates a file containing its PID in /var/run/my_process.pid#
+#    Displays manage_my_process restarted
+#    Displays Usage: manage_my_process {start|stop|restart} if any other argument or no argument is passed
+
+
+# file cotaining PID
+PROCESS_PID_FILE="/var/run/my_process.pid"
+
+# function to start my process 
+function start_my_process()
+{
+	bash "manage_my_process" &
+	echo $$ > "$PROCESS_PID_FILE";
+}
+
+# function to stop my process
+function stop_my_process()
+{
+	kill -f "manage_my_process" > "/dev/null" 2>&1 ;
+	rm -rf "$PROCESS_PID_FILE";
+}
+
+# function to restart my process
+function restart_my_process()
+{
+	"stop_my_process";
+	"start_my_process";
+}
+
+if [ -z "$1" ]
+then
+	echo "Usage: manage_my_process {start|stop|restart}";
+elif [ "$1" != "start" ] && [ "$1" != "stop" ] && [ "$1" != "restart" ]
+then
+	echo "Usage: manage_my_process {start|stop|restart}";
+else
+	if [ "$1" == "start" ]
+	then
+		"start_my_process";
+		echo "manage_my_process started";
+	fi
+	if [ "$1" == "stop" ]
+	then
+		echo "manage_my_process stopped";
+		"stop_my_process";
+	fi
+	if [ "$1" == "restart" ]
+	then
+		echo "manage_my_process restarted";
+		"restart_my_process";
+	fi
+fi
