@@ -1,0 +1,5 @@
+Host 52.204.99.18
+  HostName 52.204.99.18
+  User ubuntu
+  entityFile ~/.ssh/school
+ PasswordAuthentication no
